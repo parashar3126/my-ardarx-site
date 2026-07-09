@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
+import emailjs from '@emailjs/browser';
 
 export default function Contact() {
+  const formRef = useRef(); // 1. फॉर्म का रेफरेंस हैंडल करने के लिए
+  const [isSending, setIsSending] = useState(false); // लोडिंग स्टेट के लिए
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -10,8 +13,26 @@ export default function Contact() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // यहाँ हम भविष्य में ईमेल सेंडिंग लॉजिक जोड़ेंगे
-    alert(`Thank you ${formData.name}! Ardarx IT Solution will contact you shortly.`);
+    setIsSending(true);
+
+    // 🔑 आपकी लाइव EmailJS क्रेडेंशियल्स
+    const SERVICE_ID = 'service_vl8txyp'; 
+    const TEMPLATE_ID = 'dao48it'; 
+    const PUBLIC_KEY = 'igUOkQwnWKdPk8Hcw';   
+
+    // 🚀 ईमेल भेजने का ऑटोमेशन लॉजिक
+    emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, formRef.current, PUBLIC_KEY)
+      .then((result) => {
+        alert(`Thank you ${formData.name}! Ardarx IT Solution will contact you shortly.`);
+        // ईमेल जाने के बाद फॉर्म खाली करने के लिए
+        setFormData({ name: '', email: '', budget: '$200 - $500', details: '' });
+      }, (error) => {
+        alert("Oops! Something went wrong. Please try again or email directly.");
+        console.error("EmailJS Error:", error.text);
+      })
+      .finally(() => {
+        setIsSending(false);
+      });
   };
 
   const handleChange = (e) => {
@@ -43,7 +64,8 @@ export default function Contact() {
         </div>
 
         {/* दायाँ हिस्सा: प्रीमियम कांटैक्ट फॉर्म */}
-        <form onSubmit={handleSubmit} className="md:col-span-3 space-y-5 p-8 bg-slate-900 rounded-2xl border border-slate-800 shadow-xl text-left">
+        {/* 2. यहाँ ref={formRef} जोड़ा गया है ताकि EmailJS डेटा रीड कर सके */}
+        <form ref={formRef} onSubmit={handleSubmit} className="md:col-span-3 space-y-5 p-8 bg-slate-900 rounded-2xl border border-slate-800 shadow-xl text-left">
           <div>
             <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Your Name</label>
             <input 
@@ -97,11 +119,13 @@ export default function Contact() {
             />
           </div>
 
+          {/* 3. बटन को भेजने के दौरान डिसेबल करने के लिए स्टेट जोड़ी गई है */}
           <button 
             type="submit" 
-            className="w-full py-4 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-500 transition-all shadow-lg shadow-blue-900/30 text-center text-sm cursor-pointer"
+            disabled={isSending}
+            className="w-full py-4 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-500 transition-all shadow-lg shadow-blue-900/30 text-center text-sm cursor-pointer disabled:bg-blue-800 disabled:cursor-not-allowed"
           >
-            Submit Request
+            {isSending ? 'Sending...' : 'Submit Request'}
           </button>
         </form>
       </div>
