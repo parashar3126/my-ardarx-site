@@ -17,9 +17,8 @@ export default function Contact() {
 
     // 🔑 आपकी लाइव EmailJS क्रेडेंशियल्स
     const SERVICE_ID = 'service_vl8txyp'; 
-    const TEMPLATE_ID = 'dao48it'; 
-    const PUBLIC_KEY = 'igUOkQwnWKdPk8Hcw';   
-
+    const TEMPLATE_ID = 'template_v7fk326'; // 👈 यहाँ नया वाला आईडी डाल दिया है
+    const PUBLIC_KEY = 'igUOkQwnWKdPk8Hcw';
     // 🚀 ईमेल भेजने का ऑटोमेशन लॉजिक
     emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, formRef.current, PUBLIC_KEY)
       .then((result) => {
