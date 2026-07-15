@@ -54,7 +54,7 @@ export default function Contact() {
           <div>
             <span className="text-xs text-slate-500 block uppercase font-mono tracking-wider mb-1">Direct Agency Email</span>
             <a href="mailto:amit@ardarx.com" className="text-lg font-bold text-blue-400 hover:text-blue-300 transition-colors select-all">
-              amit@ardarx.com
+              contact@ardarx.com
             </a>
           </div>
           <div className="text-xs text-slate-500 font-mono pt-4 border-t border-slate-800">
